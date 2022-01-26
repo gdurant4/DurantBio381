@@ -1,0 +1,14 @@
+---
+title: "Index"
+author: "Grace Durant"
+date: "1/26/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This is a page for keeping track of homework assignments within Bio381 this semester 
+
+[Homework_02](Homework_02.html)
