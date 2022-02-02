@@ -1,0 +1,58 @@
+---
+title: "Homework_03"
+author: "Grace Durant"
+date: "2/2/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+1. First question text
+```
+Find: \s{2,}
+Replace: ,
+```
+I used `\s{2,}` to capture more than 2 spaces in the original text and replaced those spaces with a , the result converted text with several random spaces between words and numbers to words separated only by commas: i.e. First String,Second,1.22,3.4
+
+2. Second Question
+```
+Find: (\w*), (\w*), (.+)
+Replace: \2 \1 (\3)
+```
+I used `(\w*), (\w*), (.+)` to capture each word individually without their commas. `\w*)` was the first word `(\1)`, the following regular expression was `(\2)` and the final regular expression `(.+)` was  `(\3)`. The result was a separation of each person's first name, last name, and university. I set the replace to re-order the words and put the university in parenthesis: i.e. Sydne Record (Bryn Mawr)
+
+3. Third Question
+```
+Find: (.mp3)(\s)
+Replace: \1\n
+```
+I used `(.mp3)(\s)` to capture the space after .mp3. To keep .mp3 but replace the space between file names with a tab, I replaced the `(\s)` with a tab `(\n)` and kept .mp3 using `(\1)`. 
+
+4. Fourth Question
+```
+Find: (\d{4})(\s)(.*)(\.)(mp3)
+Replace: \3_\1\4\5
+```
+I captured the first four numbers using `(\d{4})`, the space between number and file name using `(\s)`, the file names using `(.*)` and the period and mp3 using `(\.)(mp3)`. I reordered the regular expressions in the replace box to get the final outcome. 
+
+5. Fifth Question
+```
+Find: (\w)\w+,(\w+),(.*),(\d+)
+Replace: \1_\2,\4
+```
+I captured the first letter of the first word using `(\w)` and left the rest of that word out of a parenthesis so it was deleted during the replace phase. I put all of the second word in parenthesis using `(\w+)` to preserve it. I used separate regular expressions for the first and second numbers to ensure I could choose onlu the last number in my final text.
+
+6. Sixth Question 
+```
+Find: (\w)\w+,(\w{4})(\w*),(.*),(\d+)
+Replace: \1_\2,\5
+```
+Using the previous question, I used the same regular expression with two exceptions. to ensure i only got the first 4 characters of the second word, I put `{4}` in brackets. I did not include the rest of the word in the replace phase so it was left out of the final text. 
+
+7. Seventh Question
+```
+Find: (\w{3})\w+,(\w{3})\w*,(.*),(\d+)
+Replace: \1\2, \4, \3
+```
+To get the first 3 letters of each word, I specified that using `{3}` and `\w+ or \w*` to capture the rest of the word but leave it out in the replace. the `(.*)` captured the first number values and `(\d+)` to capture the second number values. I rearranged these in the replace box to get the expected outcome. 
