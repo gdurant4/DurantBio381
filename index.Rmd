@@ -11,7 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This is a page for keeping track of homework assignments within Bio381 this semester 
 
-## Homework Assignemnts
+## Homework Assignments
+
 ### Homework Assignment 2
 [Homework_02](Homework_02.html)  
 
