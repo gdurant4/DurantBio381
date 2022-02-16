@@ -1,0 +1,75 @@
+---
+title: "Homework_05.Rmd"
+author: "Grace Durant"
+date: "2/16/2022"
+output: html_document
+---
+
+## Working with matrices, lists, and data frames
+
+### Question 1
+
+```{r}
+n_dims <- sample(3:10,1)
+print(n_dims)
+vector <- (1 : n_dims^2)
+print(vector)
+sample(vector)
+matrix_sq <- matrix(data = vector, nrow = n_dims, byrow = TRUE)
+print(matrix_sq)
+t(matrix_sq)
+# when you use the function "t" to transpose a matrix, the columns and rows switch 
+sum_firstrow <- sum(matrix_sq[1,])
+sum_lastrow <- sum(matrix_sq[5,])
+mean_firstrow <- mean(matrix_sq[1,])
+mean_lastrow <- mean(matrix_sq[5,])
+eigen(matrix_sq)
+eigen_matrix <- eigen(matrix_sq)
+print(eigen_matrix)
+# $values are imaginary numbers in scientific notation
+# $vectors are negative and positive decimals added to or subtracted from imaginary decimal numbers 
+typeof(eigen_matrix$values)
+typeof(eigen_matrix$vectors)
+# the numbers in both the $values and $vectors in the eigen_matrix are complex figures 
+```
+
+### Question 2
+```{r}
+my_values <- sample(1:16)
+my_matrix <- matrix(data = my_values, nrow = 4, ncol = 4)
+print(my_matrix)
+z <- runif(100)
+print(z)
+my_logical <- (z < 0.5)
+print(my_logical)
+rm(letters)
+my_letters <- letters
+print(my_letters)
+my_letters <- sample(my_letters)
+print(my_letters)
+list_of_elements <- list(my_matrix[2,2],my_logical[2],my_letters[2])
+print(list_of_elements)
+typeof(list_of_elements[[1]])
+typeof(list_of_elements[[2]])
+typeof(list_of_elements[[3]])
+single_atomic_vector <- c(list_of_elements[[1]], list_of_elements[[2]], list_of_elements[[3]])
+print(single_atomic_vector)
+typeof(single_atomic_vector)
+# the "single_atomic_vector" is a character
+```
+
+### Question 3
+```{r}
+my_unis <- sample(0:10,26, replace = TRUE)
+print(my_unis)
+my_letters <- sample(LETTERS)
+print(my_letters)
+dFrame <- data.frame(my_unis,my_letters, stringsAsFactors = FALSE)
+print(dFrame)
+dFrame$my_unis[sample(1:nrow(dFrame),4)] <- NA
+which(!complete.cases(dFrame))
+dFrame[order(dFrame$my_letters),]
+mean(dFrame$my_unis, na.rm=TRUE)
+```
+
+
