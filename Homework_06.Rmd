@@ -1,0 +1,171 @@
+---
+title: "Homework_06.Rmd"
+author: "Grace Durant"
+date: "2/23/2022"
+output: html_document
+---
+
+## Run the sample code
+
+```{r}
+# Open Libraries
+# library(ggplot2) # for graphics
+# library(MASS) # for maximum likelihood estimation
+
+# Read in data vector: quick and dirty, a truncated normal distribution to work on the solution set
+# z <- rnorm(n=3000,mean=0.2)
+# z <- data.frame(1:3000,z)
+# names(z) <- list("ID","myVar")
+# z <- z[z$myVar>0,]
+# str(z)
+# 
+# # Plot histogram of data
+# p1 <- ggplot(data=z, aes(x=myVar, y=..density..)) +
+#   geom_histogram(color="grey60",fill="cornsilk",size=0.2)
+# print(p1)
+# 
+# # Add empirical density curve 
+# p1 <-  p1 +  geom_density(linetype="dotted",size=0.75)
+# print(p1)
+
+# # Get maximum likelihood parameters for "normal" 
+# normPars <- fitdistr(z$myVar,"normal")
+# print(normPars)
+# str(normPars)
+# normPars$estimate["mean"] # note structure of getting a named attribute
+# 
+# # Plot "normal" probability density 
+# meanML <- normPars$estimate["mean"]
+# sdML <- normPars$estimate["sd"]
+# 
+# xval <- seq(0,max(z$myVar),len=length(z$myVar))
+# 
+# #  stat <- stat_function(aes(x = xval, y = ..y..), fun = dnorm, colour="red", n = length(z$myVar), args = list(mean = meanML, sd = sdML))
+#  p1 + stat
+
+# # Plot "exponential" probability density
+# expoPars <- fitdistr(z$myVar,"exponential")
+# rateML <- expoPars$estimate["rate"]
+# 
+# stat2 <- stat_function(aes(x = xval, y = ..y..), fun = dexp, colour="blue", n = length(z$myVar), args = list(rate=rateML))
+#  p1 + stat + stat2
+#  
+# # Plot "uniform" probability density 
+#  stat3 <- stat_function(aes(x = xval, y = ..y..), fun = dunif, colour="darkgreen", n = length(z$myVar), args = list(min=min(z$myVar), max=max(z$myVar)))
+#  p1 + stat + stat2 + stat3
+ 
+# # Plot "gamma" probability density 
+#  gammaPars <- fitdistr(z$myVar,"gamma")
+# shapeML <- gammaPars$estimate["shape"]
+# rateML <- gammaPars$estimate["rate"]
+
+# stat4 <- stat_function(aes(x = xval, y = ..y..), fun = dgamma, colour="brown", n = length(z$myVar), args = list(shape=shapeML, rate=rateML))
+#  p1 + stat + stat2 + stat3 + stat4
+ 
+# # Plot "beta" probability density 
+# pSpecial <- ggplot(data=z, aes(x=myVar/(max(myVar + 0.1)), y=..density..)) +
+#   geom_histogram(color="grey60",fill="cornsilk",size=0.2) + 
+#   xlim(c(0,1)) +
+#   geom_density(size=0.75,linetype="dotted")
+
+# betaPars <- fitdistr(x=z$myVar/max(z$myVar + 0.1),start=list(shape1=1,shape2=2),"beta")
+# shape1ML <- betaPars$estimate["shape1"]
+# shape2ML <- betaPars$estimate["shape2"]
+
+# statSpecial <- stat_function(aes(x = xval, y = ..y..), fun = dbeta, colour="orchid", n = length(z$myVar), args = list(shape1=shape1ML,shape2=shape2ML))
+# pSpecial + statSpecial
+ 
+ 
+```
+## Trying it with my own data 
+```{r}
+z <- read.table("MyDataFile.csv",header=TRUE,sep=",")
+str(z)
+summary(z)
+library(ggplot2) # for graphics
+library(MASS) # for maximum likelihood estimation
+p1 <- ggplot(data=z, aes(x=AGE_IN_YEARS, y=..density..)) +
+  geom_histogram(color="grey60",fill="cornsilk",size=0.2) 
+print(p1) # histogram of the age of humpback whales in a study. A histogram can only have one quantitative value. 
+
+p1 <-  p1 +  geom_density(linetype="dotted",size=0.75)
+print(p1) # an empirical density curve to smooth out the data
+
+normPars <- fitdistr(z$AGE_IN_YEARS,"normal") # z$AGE_IN_YEARS
+print(normPars)
+str(normPars)
+normPars$estimate["mean"] # the mean age of humpback whales was 12.375 years
+
+meanML <- normPars$estimate["mean"]
+sdML <- normPars$estimate["sd"]
+
+xval <- seq(0,max(z$AGE_IN_YEARS),len=length(z$AGE_IN_YEARS))
+
+ stat <- stat_function(aes(x = xval, y = ..y..), fun = dnorm, colour="red", n = length(z$AGE_IN_YEARS), args = list(mean = meanML, sd = sdML))
+ p1 + stat # Normal probability density 
+ 
+ expoPars <- fitdistr(z$AGE_IN_YEARS,"exponential")
+rateML <- expoPars$estimate["rate"]
+
+stat2 <- stat_function(aes(x = xval, y = ..y..), fun = dexp, colour="blue", n = length(z$AGE_IN_YEARS), args = list(rate=rateML))
+ p1 + stat + stat2 # exponential curve
+ 
+ stat3 <- stat_function(aes(x = xval, y = ..y..), fun = dunif, colour="darkgreen", n = length(z$AGE_IN_YEARS), args = list(min=min(z$AGE_IN_YEARS), max=max(z$AGE_IN_YEARS)))
+ p1 + stat + stat2 + stat3 # uniform distribution
+ 
+ gammaPars <- fitdistr(z$AGE_IN_YEARS,"gamma")
+shapeML <- gammaPars$estimate["shape"]
+rateML <- gammaPars$estimate["rate"]
+
+stat4 <- stat_function(aes(x = xval, y = ..y..), fun = dgamma, colour="brown", n = length(z$AGE_IN_YEARS), args = list(shape=shapeML, rate=rateML))
+ p1 + stat + stat2 + stat3 + stat4 # Gamma probability density. Looks most similar to data 
+ 
+ pSpecial <- ggplot(data=z, aes(x=AGE_IN_YEARS/(max(AGE_IN_YEARS + 0.1)), y=..density..)) +
+  geom_histogram(color="grey60",fill="cornsilk",size=0.2) + 
+  xlim(c(0,1)) +
+  geom_density(size=0.75,linetype="dotted")
+
+betaPars <- fitdistr(x=z$AGE_IN_YEARS/max(z$AGE_IN_YEARS + 0.1),start=list(shape1=1,shape2=2),"beta")
+shape1ML <- betaPars$estimate["shape1"]
+shape2ML <- betaPars$estimate["shape2"]
+
+statSpecial <- stat_function(aes(x = xval, y = ..y..), fun = dbeta, colour="orchid", n = length(z$AGE_IN_YEARS), args = list(shape1=shape1ML,shape2=shape2ML))
+pSpecial + statSpecial # This is a very weird curve. 
+
+```
+
+## Running My Data as Gamma
+```{r}
+z <- rgamma(40,1.396564, rate = 0.1128381)
+z <- data.frame(1:3000,z)
+names(z) <- list("SAMPLE", "AGE_IN_YEARS")
+z <- z[z$AGE_IN_YEARS>0,]
+str(z)
+summary(z$AGE_IN_YEARS)
+
+library(ggplot2) # for graphics
+library(MASS) # for maximum likelihood estimation
+p1 <- ggplot(data=z, aes(x=AGE_IN_YEARS, y=..density..)) +
+  geom_histogram(color="grey60",fill="cornsilk",size=0.2) 
+print(p1) # histogram of the age of humpback whales in a study. A histogram can only have one quantitative value. 
+
+p1 <-  p1 +  geom_density(linetype="dotted",size=0.75)
+print(p1) # an empirical density curve to smooth out the data
+
+w <- read.table("MyDataFile.csv",header=TRUE,sep=",")
+str(w)
+summary(w)
+library(ggplot2) # for graphics
+library(MASS) # for maximum likelihood estimation
+p1 <- ggplot(data=w, aes(x=AGE_IN_YEARS, y=..density..)) +
+  geom_histogram(color="grey60",fill="cornsilk",size=0.2) 
+print(p1) # histogram of the age of humpback whales in a study. A histogram can only have one quantitative value. 
+
+p1 <-  p1 +  geom_density(linetype="dotted",size=0.75)
+print(p1) # an empirical density curve to smooth out the data
+
+# The histograms are quite different. I was deciding between using uniform or gamma distribution for my simulation and decided to do gamma. The original graph looks relatively uniform, but does have a trend from high to low going left to right. There were two very small humps in the probability curve for the raw data histogram, but overall there was a single curve trending downward.  However, the gamma histogram had two large humps at the left of the histogram and three smaller ones to the right of the histogram according to the probability curve. The data were concentrated at the left of the histogram, with very few values to the right. Overall, the graph of the simulated data using the gamma distribution did not fit the data well and looked very different from the original histogram of the data. 
+```
+
+
+

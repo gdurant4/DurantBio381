@@ -25,6 +25,9 @@ This is a page for keeping track of homework assignments within Bio381 this seme
 ### Homework Assignment 5
 [Homework_05](Homework_05.html) 
 
+### Homework Assignment 6
+[Homework_06](Homework_06.html)  
+
 
 
 
