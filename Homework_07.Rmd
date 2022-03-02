@@ -1,0 +1,80 @@
+---
+title: "Homework_07"
+author: "Grace Durant"
+date: "3/2/2022"
+output: html_document
+---
+# Homework 7: Data Manipulation using the dplyr  package 
+```{r, echo=FALSE, message=FALSE}
+library(tidyverse)
+```
+# Question 1
+```{r}
+data(iris)
+class(iris)
+```
+## 150 Observations and 5 Variables 
+
+# Question 2
+```{r}
+iris1 <- filter(iris, Species %in% c("virginica","versicolor"), Sepal.Length>6, Sepal.Width>2.5)
+```
+## 56 Observations and 5 variables 
+
+# Question 3
+```{r}
+iris2<-select(iris1, Species, Sepal.Length, Sepal.Width)
+```
+## 56 Observations and 3 Variables
+
+# Question 4
+```{r}
+iris3 <- arrange(iris2,by=desc(Sepal.Length))
+ head(iris3)         
+```
+## 56 Observations and 3 Variables
+
+# Question 5
+```{r}
+iris4<- mutate(iris3, Sepal.Area = Sepal.Length*Sepal.Width)
+```
+## 56 Observations and 4 Variables 
+
+# Question 6
+```{r}
+iris5<-summarize(iris4, meanSepal.Length = mean(Sepal.Length),meanSepal.Width = mean(Sepal.Width), sampleSizeIris4=n())
+print(iris5)
+
+```
+## 1 Observation and 3 Variables 
+
+# Question 7
+```{r}
+iris6 <- iris4 %>%
+  group_by(Species) %>%
+  summarize(meanSepal.Length = mean(Sepal.Length),meanSepal.Width = mean(Sepal.Width), sampleSizeIris4=n())
+
+```
+## 2 Observations and 4 Variables
+
+# Question 8
+```{r}
+iris6b <- iris %>%
+  filter(Species %in% c("virginica","versicolor"), Sepal.Length>6, Sepal.Width>2.5) %>%
+  select(Species, Sepal.Length, Sepal.Width) %>%
+  arrange(by=desc(Sepal.Length)) %>%
+  mutate(Sepal.Area = Sepal.Length*Sepal.Width) %>%
+  group_by(Species) %>%
+  summarize(meanSepal.Length = mean(Sepal.Length),meanSepal.Width = mean(Sepal.Width), sampleSizeIris4=n()) 
+```
+## Yields the same output
+
+# Question 9
+```{r}
+iris %>%
+  pivot_longer(cols= 1:4,
+               names_to = "Measure",
+               values_to= "Value")
+```
+
+
