@@ -29,7 +29,10 @@ This is a page for keeping track of homework assignments within Bio381 this seme
 [Homework_06](Homework_06.html)  
 
 ### Homework Assignment 7
-[Homework_07](Homework_07.html)
+[Homework_07](Homework_07.html) 
+
+### Homework Assignment 8
+[Homework_08](Homework_08.html)  
 
 
 

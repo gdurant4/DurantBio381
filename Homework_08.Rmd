@@ -1,0 +1,46 @@
+---
+title: "Homework_08"
+author: "Grace Durant"
+date: "3/16/2022"
+output: html_document
+---
+# **Creating Fake Data Sets to Explore Hypotheses**
+
+### Random data set simulating whale and boat presence/absence
+* The size of each was 1000, smaller than the size of the actual data, but large enough to get a good simulation
+* This is a smaller example of the data expected. It was hypothesized that whales are present less frequently when boats are also present, but that boat have a much lower abundance than whales. 
+* both whale and boat abundance were categorical variables 
+
+```{r}
+vec0 <- c(50,15)
+vec1 <- c(100, 85)
+dataMatrix <- rbind(vec0,vec1)
+rownames(dataMatrix) <- c("WhaleAbsence", "WhalePresence")
+colnames(dataMatrix) <- c("BoatAbsence", "BoatPresence")
+str(dataMatrix)
+```
+
+* non-random numbers were used because when random numbers were generated, they did not look similar to the original data collected. It was suggested that specific numbers be used and a matrix created from those numbers, instead of random generation. 
+
+### Code to analyze the data
+* the independent variable was boats (x)
+* the dependent variable was whales (y)
+* a chi-squared test was used to analyze the data because both variables were categorical 
+
+``` {r}
+print(chisq.test(dataMatrix))
+mosaicplot(x=dataMatrix,
+           col=c("cornflowerblue","tomato","black"),
+           shade=FALSE)
+```
+
+* When the values of the table were whale + boat absence = 50, only whale absence = 150, only whale presence = 700, and both presence= 100, the p-value was < 2.2e-16
+* to check how small the differences between groups could be to still detect a significant pattern, I manually changed the values for each category. 
+* The smallest difference obtained while maintaining a significant p-value was whale + boat absence = 210, only whale absence = 190, only whale presence = 355, and both presence= 245, the p-value was 0.04357. When the overall size of the two "groups" (whales vs boats) was very different, differences within those groups did not significantly change the p-value. However, the more different each of the 4 categories values was, the more significant the data become and the lower the p-value. 
+* When the overall sample size changed and the sample size was decreased 10 fold, small changes made significant differences. This was not the case with a larger sample size. However, small sample sizes needed significant differences between the categories to generate a small p-value. A sample size of 250 was the lowest sample size tried that yielded significant results. However, at this sample size, the categroies within the matrix had to be very different values. 
+
+
+
+
+
+
