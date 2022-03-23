@@ -34,7 +34,8 @@ This is a page for keeping track of homework assignments within Bio381 this seme
 ### Homework Assignment 8
 [Homework_08](Homework_08.html)  
 
-
+### Homework Assignment 9
+[Homework_09](Homework_09.html)
 
 
 
