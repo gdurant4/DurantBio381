@@ -1,0 +1,70 @@
+---
+title: "Homework_09"
+author: "Grace Durant"
+date: "3/23/2022"
+output: html_document
+---
+
+# **Organizing Code with Structured Programming**
+
+### Explaination of Program 
+* The first function I created was a get_data function. My research is based on a presence/absence study of Humpback Whales and Boats. I created a function with two vectors comprised of two numbers each, representing presence and absence of each variable. These vectors were used to create a data matrix. The two vectors were defined in the global variable portion of the code and can be changed easily. 
+* The output from get_data was used to obtain a chi-squared analysis of the data matrix and a mosaic plot of the data matrix. Both functions input was the data matrix, but the data matrix used for these functions could easily be redefined because I set them both to x=NULL. In my program body, I set x equal to the name I gave get_data, pa_data. This allows me for flexibility in the data matrix I want to analyze. 
+
+```{r}
+library(ggplot2)
+#############################################
+# FUNCTION: get_data
+# purpose: put data into a data frame 
+# input: 2 vectors of 2 numbers 
+# output: data frame 
+# -------------------------------------------
+get_data <- function(vec0=c(50,15),vec1=c(100,85)) {
+  dataMatrix <- rbind(vec0,vec1)
+rownames(dataMatrix) <- c("WhaleAbsence", "WhalePresence")
+colnames(dataMatrix) <- c("BoatAbsence", "BoatPresence")
+return(dataMatrix)
+}
+#############################################
+# FUNCTION: summarize_data
+# purpose: analyze the data matrix 
+# input: data matrix 
+# output: chi-squared summary
+# -------------------------------------------
+summarize_data <- function(x=NULL) {
+  return(chisq.test(x))
+}
+#############################################
+# FUNCTION: graph_results
+# purpose: create a mosaic plot of presence/absence data 
+# input: data frame
+# output: mosaic plot 
+# -------------------------------------------
+graph_results <- function(x=NULL) {
+  mosaicplot(x,
+           col=c("cornflowerblue","tomato","black"),
+           shade=FALSE)
+}
+
+# Global Variable 
+# ----------------------------------------------
+boat <- c(950,50)
+whale <- c(900,85)
+# ----------------------------------------------
+
+# Program Body 
+# ----------------------------------------------
+pa_data <- get_data(vec0=boat, vec1=whale)
+pa_chisqr <- summarize_data(x=pa_data)
+graph_results(x=pa_data)
+print(pa_chisqr)
+# ----------------------------------------------
+
+
+
+
+
+
+  
+
+```
