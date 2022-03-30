@@ -1,0 +1,18 @@
+---
+title: "Homework_10"
+author: "Grace Durant"
+date: "3/30/2022"
+output: html_document
+---
+
+# Homework 10: For Loops and Randomization tests 
+### Question 1 Directions: Using a for loop, write a function to calculate the number of zeroes in a numeric vector. Before entering the loop, set up a counter variable counter <- 0. Inside the loop, add 1 to counter each time you have a zero in the matrix. Finally, use return(counter) for the output.
+
+
+```{r}
+
+
+
+
+```
+
