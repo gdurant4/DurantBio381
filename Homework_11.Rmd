@@ -1,0 +1,156 @@
+---
+title: "Homework_11"
+author: "Grace Durant"
+date: "4/6/2022"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+# Batch Processing
+## Question: Repeat the exercise from the Batch Processing Lecture (5 April), but do it using real data sets rather than purely simulated. Check with folks in your lab to see if there are multiple data sets available for analysis, or ask Nick, Lauren, or Emily for suggestions for other data sources. Stick to simple data analyses and graphics, but try to set it up as a batch process that will work on multiple files and save summary results to a common file.
+
+### all of the data I am working with has already been combined, so I am creating new random folders for this lab 
+
+```{r}
+##################################################
+# function: file_creator 
+# purpose: create a set of random files for regression
+# input: file_n = number of files to create
+#       : file_folder = name of folder for random files
+#       : file_size = c(min,max) number of rows in file
+#       : file_na = number on average of NA values per column
+# output: set of random files
+#------------------------------------------------- 
+file_creator <- function(file_n=15,
+                        file_folder="NewFiles/",
+                        file_size=c(60,1000),
+                        file_na=14){
+for (i in seq_len(file_n)) {
+file_length <- sample(file_size[1]:file_size[2],size=1) # get number of rows
+var_x <- runif(file_length) # create random x
+var_y <- runif(file_length) # create random y
+df <- data.frame(var_x,var_y) # bind into a data frame
+bad_vals <- rpois(n=1,lambda=file_na) # determine NA number
+df[sample(nrow(df),size=bad_vals),1] <- NA # random NA in var_x
+df[sample(nrow(df),size=bad_vals),2] <- NA # random NA in var_y
+
+# create label for file name with padded zeroes
+file_label <- paste(file_folder,
+                       "ranFile",
+                       formatC(i,
+                       width=3,
+                       format="d",
+                       flag="0"),
+                       ".csv",sep="")
+
+# set up data file and incorporate time stamp and minimal metadata
+write.table(cat("# Simulated random data file for batch processing","\n",
+                    "# timestamp: ",as.character(Sys.time()),"\n",
+                    "# GED","\n",
+                    "# ------------------------", "\n",
+                    "\n",
+                    file=file_label,
+                    row.names="",
+                    col.names="",
+                    sep=""))
+
+# now add the data frame
+write.table(x=df,
+            file=file_label,
+            sep=",",
+            row.names=FALSE,
+            append=TRUE)
+
+
+}
+}
+
+##################################################
+# function: reg_stats
+# fits linear model, extracts statistics
+# input: 2-column data frame (x and y)
+# output: slope, p-value, and r2
+#------------------------------------------------- 
+reg_stats <- function(d=NULL) {
+             if(is.null(d)) {
+               x_var <- runif(10)
+               y_var <- runif(10)
+               d <- data.frame(x_var,y_var)
+             }
+  . <- lm(data=d,d[,2]~d[,1])
+  . <- summary(.)
+  stats_list <- list(slope=.$coefficients[2,1],
+                    std_error=.$coefficients[2,2],
+                    r2=.$r.squared)
+  return(stats_list)
+
+}
+
+log_stats <- function(d=NULL) {
+             if(is.null(d)) {
+               x_var <- runif(10)
+               y_var <- runif(10)
+               d <- data.frame(x_var,y_var)
+             }
+  . <- glm(data=d,d[,2]~d[,1])
+  . <- summary(.)
+  stats_list2 <- list(slope=.$coefficients[2,1],
+                    std_error=.$coefficients[2,2],
+                    r2=.$r.squared)
+  return(stats_list2)
+
+}
+#--------------------------------------------
+# Global variables
+file_folder <- "NewFiles/"
+n_files <- 120
+file_out <- "StatsSummary.csv"
+#--------------------------------------------
+
+# Create 120 random data sets
+dir.create(file_folder)
+file_creator(file_n=n_files)
+file_names <- list.files(path=file_folder)
+
+# Create data frame to hold file summary statistics
+ID <- seq_along(file_names)
+file_name <- file_names
+slope <- rep(NA,n_files)
+std_error <- rep(NA,n_files)
+r2 <- rep(NA,n_files)
+
+stats_out <- data.frame(ID,file_name,slope,std_error,r2)
+
+# batch process by looping through individual files
+for (i in seq_along(file_names)) {
+  data <- read.table(file=paste(file_folder,file_names[i],sep=""),
+                     sep=",",
+                     header=TRUE) # read in next data file
+  
+  d_clean <- data[complete.cases(data),] # get clean cases
+  
+  . <- reg_stats(d_clean) # pull regression stats from clean file
+  stats_out[i,3:5] <- unlist(.) # unlist, copy into last 3 columns
+  
+}
+# set up output file and incorporate time stamp and minimal metadata
+  write.table(cat("# Summary stats for ",
+                    "batch processing of regression models","\n",
+                    "# timestamp: ",as.character(Sys.time()),"\n",
+                    "# GED","\n",
+                    "# ------------------------", "\n",
+                    "\n",
+                    file=file_out,
+                    row.names="",
+                    col.names="",
+                    sep=""))
+  
+# now add the data frame
+  write.table(x=stats_out,
+              file=file_out,
+              row.names=FALSE,
+              col.names=TRUE,
+              sep=",",
+              append=TRUE)
+```

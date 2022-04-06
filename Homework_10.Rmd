@@ -8,11 +8,125 @@ output: html_document
 # Homework 10: For Loops and Randomization tests 
 ### Question 1 Directions: Using a for loop, write a function to calculate the number of zeroes in a numeric vector. Before entering the loop, set up a counter variable counter <- 0. Inside the loop, add 1 to counter each time you have a zero in the matrix. Finally, use return(counter) for the output.
 
+```{r}
+counter <- 0
+num_vector<-c(0,0,0,0,3,4,5,3,6,7,5,3,2,4,2,1,4,6,9,0,3,4,7,8,0,2,34,56,6,9,0,2,3,56,7,8,9,0,2,2,4,4,6,7,9,9,0,0,8,7,5)
+for (i in 1:length(num_vector)) {
+  if(num_vector[i]==0) {
+    counter <- counter+1
+  }
+}
+print(counter)
+```
+
+### Question 2 Directions: Use subsetting instead of a loop to rewrite the function as a single line of code.
 
 ```{r}
+num_vector_sub <-length(num_vector[num_vector==0])
+print(num_vector_sub)
+```
 
+### Question 3 Directions: Write a function that takes as input two integers representing the number of rows and columns in a matrix. The output is a matrix of these dimensions in which each element is the product of the row number x the column number.
 
+```{r}
+#############################################
+# FUNCTION: my_function
+# input:two integers representing the number of rows and columns in a matrix
+# output: a matrix of these dimensions in which each element is the product of the row number x the column number
+# -------------------------------------------
+my_function <- function(x=5, y=5) {
+  mat <- matrix(sample(runif(10), size=x*y, replace=TRUE),
+              nrow=x,
+              ncol=y)
+    for(i in 1:x) {
+      for(j in 1:y){
+        mat[i,j] <- i*j
+      }
+    } 
+  return(mat)
+}  
+print(my_function())
+```
+
+### Question 4a-d Directions: 
+* Simulate a dataset with 3 groups of data, each group drawn from a distribution with a different mean. The final data frame should have 1 column for group and 1 column for the response variable.
+* Write a custom function that 1) reshuffles the response variable, and 2) calculates the mean of each group in the reshuffled data. Store the means in a vector of length 3.
+* Use a for loop to repeat the function in b 100 times. Store the results in a data frame that has 1 column indicating the replicate number and 1 column for each new group mean, for a total of 4 columns.
+* Use qplot() to create a histogram of the means for each reshuffled group. Or, if you want a challenge, use ggplot() to overlay all 3 histograms in the same figure. How do the distributions of reshuffled means compare to the original means?
+
+```{r}
+# Part a, simulating a data set 
+three_groups <- c(rep("group_1",4),rep("group_2",5), rep("group_3",3))
+print(three_groups)
+response_variable <- c(runif(4)+3, runif(5)+7, runif(3)-0.5)
+print(response_variable)
+df<- data.frame(group=three_groups,res=response_variable)
+print(df)
+
+# part b, custom function
+df_sim <- df
+df_sim$res <- sample(df_sim$res)
+print(df_sim)
+
+sim <- tapply(df_sim$res,df$group,mean)
+print(sim)
+sim_vector <- as.vector(sim)
+print(sim_vector)
+
+# Part c, for loop
+##################################################
+# function: shuffle_data
+# Purpose: use for loop to repeat function 100 times
+# input: means of shuffled response variables in vector form
+# output: 4-column data frame (replicate #, group mean 1, group mean2, group mean 3)
+#------------------------------------------------- 
+shuffle_data <-  function(data=NULL) {
+  data$res <- sample(data$res)
+                 
+return(data)
+}
+shuffle_data(df) 
+
+get_metric <- function(data=NULL) {
+. <- summary(aov(data=data,res~group))
+p_val <- .[[1]][["Pr(>F)"]][1]
+
+return(p_val)
+}
+get_pval <- function(z=NULL) {
+                    if(is.null(z)){
+                      z <- list(x_obs=runif(1),x_sim=runif(1000))}
+                      p_lower <- mean(z[[2]]<=z[[1]])
+                      p_upper <- mean(z[[2]]>=z[[1]])
+return(c(pl=p_lower,pu=p_upper))
+                    }          
+n_sim <- 100
+x_sim <- rep(NA,n_sim) # vector of simulated slopes
+df <- df
+x_obs <- get_metric(df)
+for (i in seq_len(n_sim)) {
+x_sim[i] <- get_metric(shuffle_data(df))
+}
+head(x_sim)
+p_value <- list(x_obs,x_sim)
+get_pval(p_value)
+library(ggplot2)
+plot_ran_test <- function(z=NULL) {
+                if(is.null(z)){
+                  z <- list(rnorm(1),rnorm(1000)) }
+df <- data.frame(ID=seq_along(z[[2]]),sim_x=z[[2]])
+
+p1 <- ggplot(data=df) + 
+       aes(x=sim_x)
+
+p1 + geom_histogram(aes(fill=I("goldenrod"),
+                        color=I("black"))) +
+     geom_vline(aes(xintercept=z[[1]],
+               col="blue")) 
+
+                  }
+
+plot_ran_test(p_value)
 
 
 ```
-
