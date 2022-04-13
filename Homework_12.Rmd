@@ -1,0 +1,39 @@
+---
+title: "Homework_12"
+author: "Grace Durant"
+date: "4/13/2022"
+output: html_document
+---
+
+# Homework 13
+## GGPLOT Exploring
+
+```{r}
+library(tidyverse)
+whale_data <- read.table(file="FinalData_March312022.csv", 
+                      header=TRUE,
+                      sep=",",
+                      comment.char="#")
+head(whale_data)
+whaleP_boatA_prelim <- filter(whale_data, Boat==0 & Whale==1)
+head(whaleP_boatA_prelim)
+whaleP_boatA <- select(whaleP_boatA_prelim, RMS..mean.)
+head(whaleP_boatA)
+whaleP_boatP_prelim <- filter(whale_data, Boat==1 & Whale==1)
+whaleP_boatP <- select(whaleP_boatP_prelim, RMS..mean.)
+whaleA_boatA_prelim <- filter(whale_data, Boat==0 & Whale==0)
+whaleA_boatA <- select(whaleA_boatA_prelim, RMS..mean.)
+whaleA_boatP_prelim <- filter(whale_data, Boat==1 & Whale==0)
+whaleA_boatP <- select(whaleA_boatP_prelim, RMS..mean.)
+
+library(ggplot2)
+library(ggthemes)
+library(patchwork)
+whale_df <- data.frame(status=c(rep("Both Absent", dim(whaleA_boatA)[1]),rep("Only Whales Present", dim(whaleP_boatA)[1]), rep("Only Boats Present", dim(whaleA_boatP)[1]), rep("Both Present", dim(whaleP_boatP)[1])),Mean_RMS=rbind(whaleA_boatA, whaleP_boatA, whaleA_boatP, whaleP_boatP))
+
+Modification <- qplot(x=whale_df$status, y=whale_df$RMS..mean.,geom="boxplot",fill=I("cyan3")) +
+  labs(title="Comparing Mean RMS with Whale and Boat Presence and Absence",
+      x="Whale + Boat Status",
+      y="Mean RMS") + ylim(100,132) # got rid of one "Whales Present Point that was a huge outlier
+print(Modification) 
+```
