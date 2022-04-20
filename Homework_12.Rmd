@@ -3,12 +3,13 @@ title: "Homework_12"
 author: "Grace Durant"
 date: "4/13/2022"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
-# Homework 13
+# Homework 12
 ## GGPLOT Exploring
-
-```{r}
+```{r, include=FALSE}
 library(tidyverse)
 whale_data <- read.table(file="FinalData_March312022.csv", 
                       header=TRUE,
@@ -32,8 +33,120 @@ library(patchwork)
 whale_df <- data.frame(status=c(rep("Both Absent", dim(whaleA_boatA)[1]),rep("Only Whales Present", dim(whaleP_boatA)[1]), rep("Only Boats Present", dim(whaleA_boatP)[1]), rep("Both Present", dim(whaleP_boatP)[1])),Mean_RMS=rbind(whaleA_boatA, whaleP_boatA, whaleA_boatP, whaleP_boatP))
 
 Modification <- qplot(x=whale_df$status, y=whale_df$RMS..mean.,geom="boxplot",fill=I("cyan3")) +
-  labs(title="Comparing Mean RMS with Whale and Boat Presence and Absence",
+  labs(title="All Years",
       x="Whale + Boat Status",
-      y="Mean RMS") + ylim(100,132) # got rid of one "Whales Present Point that was a huge outlier
+      y="Mean RMS") + ylim(105,125) # got rid of one "Whales Present Point that was a huge outlier
 print(Modification) 
+```
+
+```{r, include=FALSE}
+## Whale Presence and Absence boxplots for 2019
+library(tidyverse)
+whale_data <- read.table(file="FinalData_March312022.csv", 
+                      header=TRUE,
+                      sep=",",
+                      comment.char="#")
+head(whale_data)
+whaleP_boatA_prelim19 <- filter(whale_data, Boat==0 & Whale==1 & Year==2019)
+head(whaleP_boatA_prelim19)
+whaleP_boatA19 <- select(whaleP_boatA_prelim19, RMS..mean.)
+head(whaleP_boatA19)
+whaleP_boatP_prelim19 <- filter(whale_data, Boat==1 & Whale==1 & Year==2019)
+whaleP_boatP19 <- select(whaleP_boatP_prelim19, RMS..mean.)
+whaleA_boatA_prelim19 <- filter(whale_data, Boat==0 & Whale==0 & Year==2019)
+whaleA_boatA19 <- select(whaleA_boatA_prelim19, RMS..mean.)
+whaleA_boatP_prelim19 <- filter(whale_data, Boat==1 & Whale==0 & Year==2019)
+whaleA_boatP19 <- select(whaleA_boatP_prelim19, RMS..mean.)
+
+library(ggplot2)
+library(ggthemes)
+library(patchwork)
+whale_df19 <- data.frame(status=c(rep("Both Absent", dim(whaleA_boatA19)[1]),rep("Only Whales Present", dim(whaleP_boatA19)[1]), rep("Only Boats Present", dim(whaleA_boatP19)[1]), rep("Both Present", dim(whaleP_boatP19)[1])),Mean_RMS=rbind(whaleA_boatA19, whaleP_boatA19, whaleA_boatP19, whaleP_boatP19))
+
+Modification19 <- qplot(x=whale_df19$status, y=whale_df19$RMS..mean.,geom="boxplot",fill=I("cornflowerblue")) +
+  labs(title="2019",
+      x="Whale + Boat Status",
+      y="Mean RMS") # got rid of one "Whales Present Point that was a huge outlier
+print(Modification19) 
+### there is no boxplot to containing "Only boats present" because there was no circumstance where a boat was present and a whale was not
+```
+
+
+
+```{r, include=FALSE}
+## Whale Presence and Absence box plot for 2020
+library(tidyverse)
+whale_data <- read.table(file="FinalData_March312022.csv", 
+                      header=TRUE,
+                      sep=",",
+                      comment.char="#")
+head(whale_data)
+whaleP_boatA_prelim20 <- filter(whale_data, Boat==0 & Whale==1 & Year==2020)
+head(whaleP_boatA_prelim20)
+whaleP_boatA20 <- select(whaleP_boatA_prelim20, RMS..mean.)
+head(whaleP_boatA20)
+whaleP_boatP_prelim20 <- filter(whale_data, Boat==1 & Whale==1 & Year==2020)
+whaleP_boatP20 <- select(whaleP_boatP_prelim20, RMS..mean.)
+whaleA_boatA_prelim20 <- filter(whale_data, Boat==0 & Whale==0 & Year==2020)
+whaleA_boatA20 <- select(whaleA_boatA_prelim20, RMS..mean.)
+whaleA_boatP_prelim20 <- filter(whale_data, Boat==1 & Whale==0 & Year==2020)
+whaleA_boatP20 <- select(whaleA_boatP_prelim20, RMS..mean.)
+
+library(ggplot2)
+library(ggthemes)
+library(patchwork)
+whale_df20 <- data.frame(status=c(rep("Both Absent", dim(whaleA_boatA20)[1]),rep("Only Whales Present", dim(whaleP_boatA20)[1]), rep("Only Boats Present", dim(whaleA_boatP20)[1]), rep("Both Present", dim(whaleP_boatP20)[1])),Mean_RMS=rbind(whaleA_boatA20, whaleP_boatA20, whaleA_boatP20, whaleP_boatP20))
+
+Modification20 <- qplot(x=whale_df20$status, y=whale_df20$RMS..mean.,geom="boxplot",fill=I("cadetblue3")) +
+  labs(title="2020",
+      x="Whale + Boat Status",
+      y="Mean RMS") + ylim(110,130) # got rid of one "Whales Present Point that was a huge outlier
+print(Modification20) 
+# removed one outlier at 155.8 RMS under "Only Whales Present" 
+```
+
+
+```{r, include=FALSE}
+## Whale Presence and Absence boxplots for 2021
+library(tidyverse)
+whale_data <- read.table(file="FinalData_March312022.csv", 
+                      header=TRUE,
+                      sep=",",
+                      comment.char="#")
+head(whale_data)
+whaleP_boatA_prelim21 <- filter(whale_data, Boat==0 & Whale==1 & Year==2021)
+head(whaleP_boatA_prelim21)
+whaleP_boatA21 <- select(whaleP_boatA_prelim21, RMS..mean.)
+head(whaleP_boatA21)
+whaleP_boatP_prelim21 <- filter(whale_data, Boat==1 & Whale==1 & Year==2021)
+whaleP_boatP21 <- select(whaleP_boatP_prelim21, RMS..mean.)
+whaleA_boatA_prelim21 <- filter(whale_data, Boat==0 & Whale==0 & Year==2021)
+whaleA_boatA21 <- select(whaleA_boatA_prelim21, RMS..mean.)
+whaleA_boatP_prelim21 <- filter(whale_data, Boat==1 & Whale==0 & Year==2021)
+whaleA_boatP21 <- select(whaleA_boatP_prelim21, RMS..mean.)
+
+library(ggplot2)
+library(ggthemes)
+library(patchwork)
+whale_df21 <- data.frame(status=c(rep("Both Absent", dim(whaleA_boatA21)[1]),rep("Only Whales Present", dim(whaleP_boatA21)[1]), rep("Only Boats Present", dim(whaleA_boatP21)[1]), rep("Both Present", dim(whaleP_boatP21)[1])),Mean_RMS=rbind(whaleA_boatA21, whaleP_boatA21, whaleA_boatP21, whaleP_boatP21))
+
+Modification21 <- qplot(x=whale_df21$status, y=whale_df21$RMS..mean.,geom="boxplot",fill=I("aquamarine3")) +
+  labs(title="2021",
+      x="Whale + Boat Status",
+      y="Mean RMS")  # got rid of one "Whales Present Point that was a huge outlier
+print(Modification21) 
+# removed one outlier at 155.8 RMS under "Only Whales Present" 
+```
+
+Combining all plots 
+```{r, echo=FALSE, warning=FALSE}
+library(ggplot2)
+library(ggthemes)
+library(patchwork)
+library(TeachingDemos)
+(Modification19 | Modification20 | Modification21) / Modification + plot_annotation(
+  title = "Comparison of Mean RMS and Boat Presence and Absence", 
+  theme=theme(plot.title=element_text(size=16)))
+
+
 ```
